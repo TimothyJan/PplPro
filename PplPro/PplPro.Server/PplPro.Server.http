@@ -1,0 +1,6 @@
+@PplPro.Server_HostAddress = http://localhost:5188
+
+GET {{PplPro.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
