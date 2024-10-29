@@ -29,6 +29,6 @@ Process:
       </li>
     </ul>
   </li>
-  <li>Implement CRUD Operations with Entity Framework.</li>
-  <li>Set Up Angular Frontend to Communicate with the API.</li>
+  <li>Implement CRUD Operations with Entity Framework. Set Up Angular Frontend to Communicate with the API.</li>
+  <li>Design frontend.</li>
 </ul>
