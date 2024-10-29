@@ -1,0 +1,23 @@
+{
+  "Version": 1,
+  "Hash": "rBY4OpE9LwgFITPlHM7+zGt1scowxksOxq+mbZok8CQ=",
+  "Source": "PplPro.Server",
+  "BasePath": "_content/PplPro.Server",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [
+    {
+      "Identity": "C:\\Users\\janti\\OneDrive\\Documents\\GitHub\\PplPro\\PplPro\\pplpro.client\\pplpro.client.esproj",
+      "Version": 2,
+      "Source": "pplpro.client",
+      "GetPublishAssetsTargets": "GetCurrentProjectPublishStaticWebAssetItems",
+      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained",
+      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
+      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained"
+    }
+  ],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
