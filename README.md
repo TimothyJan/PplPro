@@ -10,8 +10,8 @@ Process:
       <li>Get Connection String.</li>
     </ul>
   </li>
-  <li>
-    <ul>Configure ASP.NET Core to Connect to Azure SQL Database
+  <li>Configure ASP.NET Core to Connect to Azure SQL Database
+    <ul>
       <li>Add Connection String to appsettings.json.</li>
       <li>Create Employee model, database context, and model repository.
         <ul>

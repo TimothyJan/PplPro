@@ -3,11 +3,13 @@ using PplPro.Server.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Fetch connection string from environment variable
+var connectionString = Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTION")
+                       ?? builder.Configuration.GetConnectionString("AzureSqlDb");
 
 // Register your DbContext here
 builder.Services.AddDbContext<EmployeeDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("AzureSqlDb")));
+    options.UseSqlServer(connectionString ?? throw new InvalidOperationException("Connection string not found.")));
 
 // Register the IEmployeeRepository and its implementation
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
