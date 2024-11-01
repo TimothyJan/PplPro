@@ -5,10 +5,11 @@ namespace PplPro.Server.Models
 {
     public interface IRoleRepository
     {
-        Task<IEnumerable<Role>> GetAllRolesAsync();
-        Task<Role> GetRoleByIdAsync(int id);
-        Task AddRoleAsync(Role role);
-        Task UpdateRoleAsync(Role role);
+        Task<IEnumerable<RoleDTO>> GetAllRolesAsync();
+        Task<RoleDTO> GetRoleByIdAsync(int id);
+        Task AddRoleAsync(RoleDTO roleDto);
+        Task UpdateRoleAsync(RoleDTO roleDto);
         Task DeleteRoleAsync(int id);
     }
+
 }

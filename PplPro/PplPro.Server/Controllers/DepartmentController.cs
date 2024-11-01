@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PplPro.Server.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using PplPro.Server.Models;
 
 namespace PplPro.Server.Controllers
 {
@@ -17,14 +17,14 @@ namespace PplPro.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Department>>> GetAllDepartments()
+        public async Task<ActionResult<IEnumerable<DepartmentDTO>>> GetAllDepartments()
         {
             var departments = await _departmentRepository.GetAllDepartmentsAsync();
             return Ok(departments);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Department>> GetDepartmentById(int id)
+        public async Task<IActionResult> GetDepartmentById(int id)
         {
             var department = await _departmentRepository.GetDepartmentByIdAsync(id);
             if (department == null)
@@ -35,20 +35,21 @@ namespace PplPro.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddDepartment([FromBody] Department department)
+        public async Task<IActionResult> CreateDepartment([FromBody] DepartmentDTO departmentDto)
         {
-            await _departmentRepository.AddDepartmentAsync(department);
-            return CreatedAtAction(nameof(GetDepartmentById), new { id = department.DepartmentID }, department);
+            await _departmentRepository.AddDepartmentAsync(departmentDto);
+            return CreatedAtAction(nameof(GetDepartmentById), new { id = departmentDto.DepartmentID }, departmentDto);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateDepartment(int id, [FromBody] Department department)
+        public async Task<IActionResult> UpdateDepartment(int id, [FromBody] DepartmentDTO departmentDto)
         {
-            if (id != department.DepartmentID)
+            if (id != departmentDto.DepartmentID)
             {
                 return BadRequest();
             }
-            await _departmentRepository.UpdateDepartmentAsync(department);
+
+            await _departmentRepository.UpdateDepartmentAsync(departmentDto);
             return NoContent();
         }
 

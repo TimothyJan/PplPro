@@ -5,38 +5,55 @@ namespace PplPro.Server.Models
 {
     public static class SeedData
     {
-        public static void Initialize(EmployeeDbContext context)
+        public static void Initialize(IServiceProvider serviceProvider)
         {
-            // Check if there are existing departments
-            if (context.Departments.Any())
+            using (var context = new EmployeeDbContext(
+                serviceProvider.GetRequiredService<DbContextOptions<EmployeeDbContext>>()))
             {
-                return;   // DB has been seeded
+                // Check if the database has already been seeded
+                if (context.Departments.Any() || context.Roles.Any() || context.Employees.Any())
+                {
+                    return; // Database has been seeded, exit method
+                }
+
+                // Seed Departments
+                var departments = new Department[]
+                {
+                    new Department { DepartmentName = "Finance" },
+                    new Department { DepartmentName = "Human Resources" },
+                    new Department { DepartmentName = "Information Technology" }
+                };
+                context.Departments.AddRange(departments);
+                context.SaveChanges();
+
+                // Seed Roles
+                var roles = new Role[]
+                {
+                    new Role { RoleName = "Accountant", DepartmentID = departments[0].DepartmentID },
+                    new Role { RoleName = "Financial Analyst", DepartmentID = departments[0].DepartmentID },
+                    new Role { RoleName = "Finance Manager", DepartmentID = departments[0].DepartmentID },
+                    new Role { RoleName = "HR Assistant", DepartmentID = departments[1].DepartmentID },
+                    new Role { RoleName = "HR Specialist", DepartmentID = departments[1].DepartmentID },
+                    new Role { RoleName = "HR Director", DepartmentID = departments[1].DepartmentID },
+                    new Role { RoleName = "Software Engineer", DepartmentID = departments[2].DepartmentID },
+                    new Role { RoleName = "Front-End Developer", DepartmentID = departments[2].DepartmentID },
+                    new Role { RoleName = "Back-End Developer", DepartmentID = departments[2].DepartmentID },
+                    new Role { RoleName = "Full-Stack Developer", DepartmentID = departments[2].DepartmentID }
+                };
+                context.Roles.AddRange(roles);
+                context.SaveChanges();
+
+                // Seed Employees
+                var employees = new Employee[]
+                {
+                    new Employee { Name = "Alice Johnson", Position = "Accountant", Salary = 60000, DepartmentID = departments[0].DepartmentID, RoleID = roles[0].RoleID },
+                    new Employee { Name = "Bob Smith", Position = "Financial Analyst", Salary = 70000, DepartmentID = departments[0].DepartmentID, RoleID = roles[1].RoleID },
+                    new Employee { Name = "Catherine Green", Position = "HR Specialist", Salary = 65000, DepartmentID = departments[1].DepartmentID, RoleID = roles[4].RoleID },
+                    new Employee { Name = "David Brown", Position = "Software Engineer", Salary = 90000, DepartmentID = departments[2].DepartmentID, RoleID = roles[6].RoleID }
+                };
+                context.Employees.AddRange(employees);
+                context.SaveChanges();
             }
-
-            var departments = new Department[]
-            {
-                new Department { DepartmentID = 1, DepartmentName = "Finance" },
-                new Department { DepartmentID = 2, DepartmentName = "Human Resources" },
-                new Department { DepartmentID = 3, DepartmentName = "Information Technology" }
-            };
-
-            var roles = new Role[]
-            {
-                new Role { RoleID = 1, RoleName = "Accountant", DepartmentID = 1 },
-                new Role { RoleID = 2, RoleName = "Financial Analyst", DepartmentID = 1 },
-                new Role { RoleID = 3, RoleName = "Finance Manager", DepartmentID = 1 },
-                new Role { RoleID = 4, RoleName = "HR Assistant", DepartmentID = 2 },
-                new Role { RoleID = 5, RoleName = "HR Specialist", DepartmentID = 2 },
-                new Role { RoleID = 6, RoleName = "HR Director", DepartmentID = 2 },
-                new Role { RoleID = 7, RoleName = "Software Engineer", DepartmentID = 3 },
-                new Role { RoleID = 8, RoleName = "Front-End Developer", DepartmentID = 3 },
-                new Role { RoleID = 9, RoleName = "Back-End Developer", DepartmentID = 3 },
-                new Role { RoleID = 10, RoleName = "Full-Stack Developer", DepartmentID = 3 }
-            };
-
-            context.Departments.AddRange(departments);
-            context.Roles.AddRange(roles);
-            context.SaveChanges();
         }
     }
 }

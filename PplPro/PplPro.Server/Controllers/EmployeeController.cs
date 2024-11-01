@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PplPro.Server.Models;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace PplPro.Server.Controllers
@@ -17,7 +17,7 @@ namespace PplPro.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllEmployees()
+        public async Task<ActionResult<IEnumerable<EmployeeDTO>>> GetAllEmployees()
         {
             var employees = await _employeeRepository.GetAllEmployeesAsync();
             return Ok(employees);
@@ -29,47 +29,35 @@ namespace PplPro.Server.Controllers
             var employee = await _employeeRepository.GetEmployeeByIdAsync(id);
             if (employee == null)
             {
-                return NotFound(); // Return 404 if not found
+                return NotFound();
             }
             return Ok(employee);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddEmployee([FromBody] Employee employee)
+        public async Task<IActionResult> CreateEmployee([FromBody] EmployeeDTO employeeDto)
         {
-            await _employeeRepository.AddEmployeeAsync(employee);
-            return CreatedAtAction(nameof(GetEmployeeById), new { id = employee.EmployeeID }, employee); // Return 201 Created
+            await _employeeRepository.AddEmployeeAsync(employeeDto);
+            return CreatedAtAction(nameof(GetEmployeeById), new { id = employeeDto.EmployeeID }, employeeDto);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateEmployee(int id, [FromBody] Employee employee)
+        public async Task<IActionResult> UpdateEmployee(int id, [FromBody] EmployeeDTO employeeDto)
         {
-            if (id != employee.EmployeeID)
+            if (id != employeeDto.EmployeeID)
             {
-                return BadRequest(); // Return 400 Bad Request if IDs do not match
+                return BadRequest();
             }
 
-            var existingEmployee = await _employeeRepository.GetEmployeeByIdAsync(id);
-            if (existingEmployee == null)
-            {
-                return NotFound(); // Return 404 if the employee is not found
-            }
-
-            await _employeeRepository.UpdateEmployeeAsync(employee);
-            return NoContent(); // Return 204 No Content to indicate success
+            await _employeeRepository.UpdateEmployeeAsync(employeeDto);
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEmployee(int id)
         {
-            var existingEmployee = await _employeeRepository.GetEmployeeByIdAsync(id);
-            if (existingEmployee == null)
-            {
-                return NotFound(); // Return 404 if the employee is not found
-            }
-
             await _employeeRepository.DeleteEmployeeAsync(id);
-            return NoContent(); // Return 204 No Content to indicate success
+            return NoContent();
         }
     }
 }

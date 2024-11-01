@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PplPro.Server.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using PplPro.Server.Models;
 
 namespace PplPro.Server.Controllers
 {
@@ -17,14 +17,14 @@ namespace PplPro.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Role>>> GetAllRoles()
+        public async Task<ActionResult<IEnumerable<RoleDTO>>> GetAllRoles()
         {
             var roles = await _roleRepository.GetAllRolesAsync();
             return Ok(roles);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Role>> GetRoleById(int id)
+        public async Task<IActionResult> GetRoleById(int id)
         {
             var role = await _roleRepository.GetRoleByIdAsync(id);
             if (role == null)
@@ -35,20 +35,21 @@ namespace PplPro.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddRole([FromBody] Role role)
+        public async Task<IActionResult> CreateRole([FromBody] RoleDTO roleDto)
         {
-            await _roleRepository.AddRoleAsync(role);
-            return CreatedAtAction(nameof(GetRoleById), new { id = role.RoleID }, role);
+            await _roleRepository.AddRoleAsync(roleDto);
+            return CreatedAtAction(nameof(GetRoleById), new { id = roleDto.RoleID }, roleDto);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateRole(int id, [FromBody] Role role)
+        public async Task<IActionResult> UpdateRole(int id, [FromBody] RoleDTO roleDto)
         {
-            if (id != role.RoleID)
+            if (id != roleDto.RoleID)
             {
                 return BadRequest();
             }
-            await _roleRepository.UpdateRoleAsync(role);
+
+            await _roleRepository.UpdateRoleAsync(roleDto);
             return NoContent();
         }
 

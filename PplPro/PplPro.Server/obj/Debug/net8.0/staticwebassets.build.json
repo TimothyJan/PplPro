@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "Crqo/9mwbvOkitkQ9hwCoi/Ii8yecq8qnJ6ZslI+i0Q=",
+  "Hash": "rBY4OpE9LwgFITPlHM7+zGt1scowxksOxq+mbZok8CQ=",
   "Source": "PplPro.Server",
   "BasePath": "_content/PplPro.Server",
   "Mode": "Default",
@@ -11,10 +11,10 @@
       "Version": 2,
       "Source": "pplpro.client",
       "GetPublishAssetsTargets": "GetCurrentProjectPublishStaticWebAssetItems",
-      "AdditionalPublishProperties": "",
+      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
       "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained",
       "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
-      "AdditionalBuildProperties": "",
+      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
       "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained"
     }
   ],

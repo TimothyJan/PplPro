@@ -3,7 +3,7 @@
 "ServerUrl": "https://localhost:4200",
 "RedirectUrl": "",
 "LaunchCommand": "npm start",
-"WorkingDirectory": "C:\\Users\\janti\\OneDrive\\Documents\\GitHub\\PplPro\\PplPro\\pplpro.server\\..\\pplpro.client",
+"WorkingDirectory": "C:\\Users\\janti\\OneDrive\\Documents\\GitHub\\PplPro\\PplPro\\PplPro.Server\\..\\pplpro.client",
 "MaxTimeoutInSeconds": "120",
 "KeepRunning": "false"
 }

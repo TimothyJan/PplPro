@@ -13,39 +13,73 @@ namespace PplPro.Server.Models
             _context = context;
         }
 
-        public async Task<IEnumerable<Employee>> GetAllEmployeesAsync()
+        public async Task<IEnumerable<EmployeeDTO>> GetAllEmployeesAsync()
         {
             return await _context.Employees
-                                 .Include(e => e.Department)
-                                 .Include(e => e.Role)
-                                 .ToListAsync();
+                .Select(e => new EmployeeDTO
+                {
+                    EmployeeID = e.EmployeeID,
+                    Name = e.Name,
+                    Position = e.Position,
+                    Salary = e.Salary,
+                    DepartmentID = e.DepartmentID,
+                    RoleID = e.RoleID
+                })
+                .ToListAsync();
         }
 
-        public async Task<Employee> GetEmployeeByIdAsync(int id)
+        public async Task<EmployeeDTO> GetEmployeeByIdAsync(int id)
         {
-            return await _context.Employees.FindAsync(id);
+            var employee = await _context.Employees.FindAsync(id);
+            if (employee == null) return null;
+
+            return new EmployeeDTO
+            {
+                EmployeeID = employee.EmployeeID,
+                Name = employee.Name,
+                Position = employee.Position,
+                Salary = employee.Salary,
+                DepartmentID = employee.DepartmentID,
+                RoleID = employee.RoleID
+            };
         }
 
-        public async Task AddEmployeeAsync(Employee employee)
+        public async Task AddEmployeeAsync(EmployeeDTO employeeDto)
         {
-            await _context.Employees.AddAsync(employee);
+            var employee = new Employee
+            {
+                Name = employeeDto.Name,
+                Position = employeeDto.Position,
+                Salary = employeeDto.Salary,
+                DepartmentID = employeeDto.DepartmentID,
+                RoleID = employeeDto.RoleID
+            };
+            _context.Employees.Add(employee);
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateEmployeeAsync(Employee employee)
+        public async Task UpdateEmployeeAsync(EmployeeDTO employeeDto)
         {
-            _context.Employees.Update(employee);
+            var employee = await _context.Employees.FindAsync(employeeDto.EmployeeID);
+            if (employee == null) return;
+
+            employee.Name = employeeDto.Name;
+            employee.Position = employeeDto.Position;
+            employee.Salary = employeeDto.Salary;
+            employee.DepartmentID = employeeDto.DepartmentID;
+            employee.RoleID = employeeDto.RoleID;
+
             await _context.SaveChangesAsync();
         }
 
         public async Task DeleteEmployeeAsync(int id)
         {
             var employee = await _context.Employees.FindAsync(id);
-            if (employee != null)
-            {
-                _context.Employees.Remove(employee);
-                await _context.SaveChangesAsync();
-            }
+            if (employee == null) return;
+
+            _context.Employees.Remove(employee);
+            await _context.SaveChangesAsync();
         }
     }
+
 }

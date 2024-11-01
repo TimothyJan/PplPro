@@ -2,8 +2,6 @@
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace PplPro.Server.Migrations
 {
     /// <inheritdoc />
@@ -31,11 +29,18 @@ namespace PplPro.Server.Migrations
                 {
                     RoleID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                    RoleName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    DepartmentID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Roles", x => x.RoleID);
+                    table.ForeignKey(
+                        name: "FK_Roles_Departments_DepartmentID",
+                        column: x => x.DepartmentID,
+                        principalTable: "Departments",
+                        principalColumn: "DepartmentID",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -58,22 +63,13 @@ namespace PplPro.Server.Migrations
                         column: x => x.DepartmentID,
                         principalTable: "Departments",
                         principalColumn: "DepartmentID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Employees_Roles_RoleID",
                         column: x => x.RoleID,
                         principalTable: "Roles",
                         principalColumn: "RoleID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.InsertData(
-                table: "Departments",
-                columns: new[] { "DepartmentID", "DepartmentName" },
-                values: new object[,]
-                {
-                    { 1, "Human Resources" },
-                    { 2, "Engineering" }
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -85,6 +81,11 @@ namespace PplPro.Server.Migrations
                 name: "IX_Employees_RoleID",
                 table: "Employees",
                 column: "RoleID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Roles_DepartmentID",
+                table: "Roles",
+                column: "DepartmentID");
         }
 
         /// <inheritdoc />
@@ -94,10 +95,10 @@ namespace PplPro.Server.Migrations
                 name: "Employees");
 
             migrationBuilder.DropTable(
-                name: "Departments");
+                name: "Roles");
 
             migrationBuilder.DropTable(
-                name: "Roles");
+                name: "Departments");
         }
     }
 }

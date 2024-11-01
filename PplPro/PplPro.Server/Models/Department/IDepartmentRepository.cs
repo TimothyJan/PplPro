@@ -5,10 +5,10 @@ namespace PplPro.Server.Models
 {
     public interface IDepartmentRepository
     {
-        Task<IEnumerable<Department>> GetAllDepartmentsAsync();
-        Task<Department> GetDepartmentByIdAsync(int id);
-        Task AddDepartmentAsync(Department department);
-        Task UpdateDepartmentAsync(Department department);
+        Task<IEnumerable<DepartmentDTO>> GetAllDepartmentsAsync();
+        Task<DepartmentDTO> GetDepartmentByIdAsync(int id);
+        Task AddDepartmentAsync(DepartmentDTO departmentDto);
+        Task UpdateDepartmentAsync(DepartmentDTO departmentDto);
         Task DeleteDepartmentAsync(int id);
     }
 }

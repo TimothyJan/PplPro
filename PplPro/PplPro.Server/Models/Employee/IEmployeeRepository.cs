@@ -5,10 +5,11 @@ namespace PplPro.Server.Models
 {
     public interface IEmployeeRepository
     {
-        Task<IEnumerable<Employee>> GetAllEmployeesAsync();
-        Task<Employee> GetEmployeeByIdAsync(int id);
-        Task AddEmployeeAsync(Employee employee);
-        Task UpdateEmployeeAsync(Employee employee);
+        Task<IEnumerable<EmployeeDTO>> GetAllEmployeesAsync();
+        Task<EmployeeDTO> GetEmployeeByIdAsync(int id);
+        Task AddEmployeeAsync(EmployeeDTO employeeDto);
+        Task UpdateEmployeeAsync(EmployeeDTO employeeDto);
         Task DeleteEmployeeAsync(int id);
     }
+
 }

@@ -13,36 +13,61 @@ namespace PplPro.Server.Models
             _context = context;
         }
 
-        public async Task<IEnumerable<Role>> GetAllRolesAsync()
+        public async Task<IEnumerable<RoleDTO>> GetAllRolesAsync()
         {
-            return await _context.Roles.ToListAsync();
+            return await _context.Roles
+                .Select(r => new RoleDTO
+                {
+                    RoleID = r.RoleID,
+                    RoleName = r.RoleName,
+                    DepartmentID = r.DepartmentID
+                })
+                .ToListAsync();
         }
 
-        public async Task<Role> GetRoleByIdAsync(int id)
+        public async Task<RoleDTO> GetRoleByIdAsync(int id)
         {
-            return await _context.Roles.FindAsync(id);
+            var role = await _context.Roles.FindAsync(id);
+            if (role == null) return null;
+
+            return new RoleDTO
+            {
+                RoleID = role.RoleID,
+                RoleName = role.RoleName,
+                DepartmentID = role.DepartmentID
+            };
         }
 
-        public async Task AddRoleAsync(Role role)
+        public async Task AddRoleAsync(RoleDTO roleDto)
         {
-            await _context.Roles.AddAsync(role);
+            var role = new Role
+            {
+                RoleName = roleDto.RoleName,
+                DepartmentID = roleDto.DepartmentID
+            };
+            _context.Roles.Add(role);
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateRoleAsync(Role role)
+        public async Task UpdateRoleAsync(RoleDTO roleDto)
         {
-            _context.Roles.Update(role);
+            var role = await _context.Roles.FindAsync(roleDto.RoleID);
+            if (role == null) return;
+
+            role.RoleName = roleDto.RoleName;
+            role.DepartmentID = roleDto.DepartmentID;
+
             await _context.SaveChangesAsync();
         }
 
         public async Task DeleteRoleAsync(int id)
         {
             var role = await _context.Roles.FindAsync(id);
-            if (role != null)
-            {
-                _context.Roles.Remove(role);
-                await _context.SaveChangesAsync();
-            }
+            if (role == null) return;
+
+            _context.Roles.Remove(role);
+            await _context.SaveChangesAsync();
         }
     }
+
 }

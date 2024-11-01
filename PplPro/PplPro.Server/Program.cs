@@ -3,14 +3,14 @@ using PplPro.Server.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Fetch connection string from environment variable
+// Fetch connection string from environment variable or configuration
 var connectionString = Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTION")
-                       ?? builder.Configuration.GetConnectionString("AzureSqlDb");
+                   ?? builder.Configuration.GetConnectionString("AzureSqlDb");
 
-// Register DbContext here
+// Register DbContext with retry policy for transient fault handling
 builder.Services.AddDbContext<EmployeeDbContext>(options =>
     options.UseSqlServer(connectionString ?? throw new InvalidOperationException("Connection string not found."),
-        sqlOptions => sqlOptions.EnableRetryOnFailure())); // Enable retry on failure
+        sqlOptions => sqlOptions.EnableRetryOnFailure()));
 
 // Register repositories and services for dependency injection
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
@@ -26,7 +26,7 @@ builder.Services.AddCors(options =>
                         .AllowAnyHeader());
 });
 
-// Other service registrations
+// Add other services
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -52,7 +52,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Seed initial data for departments and roles
+// Seed initial data for departments, roles, and employees
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -64,7 +64,8 @@ using (var scope = app.Services.CreateScope())
         context.Database.Migrate();
     }
 
-    SeedData.Initialize(context);  // Call a seeding method here
+    // Call the SeedData initializer with the service provider
+    SeedData.Initialize(services);
 }
 
 app.Run();

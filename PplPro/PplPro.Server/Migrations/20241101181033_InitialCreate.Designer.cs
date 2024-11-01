@@ -11,8 +11,8 @@ using PplPro.Server.Models;
 namespace PplPro.Server.Migrations
 {
     [DbContext(typeof(EmployeeDbContext))]
-    [Migration("20241031211406_AddDepartmentIDToRoles")]
-    partial class AddDepartmentIDToRoles
+    [Migration("20241101181033_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -106,13 +106,13 @@ namespace PplPro.Server.Migrations
                     b.HasOne("PplPro.Server.Models.Department", "Department")
                         .WithMany("Employees")
                         .HasForeignKey("DepartmentID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("PplPro.Server.Models.Role", "Role")
                         .WithMany("Employees")
                         .HasForeignKey("RoleID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Department");
@@ -125,7 +125,7 @@ namespace PplPro.Server.Migrations
                     b.HasOne("PplPro.Server.Models.Department", "Department")
                         .WithMany("Roles")
                         .HasForeignKey("DepartmentID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Department");
