@@ -1,1 +1,48 @@
-<p>employee-list works!</p>
+<div class="container mt-4">
+  <h2 class="text-center">Employee Management System</h2>
+
+  <mat-slide-toggle></mat-slide-toggle>
+
+  <!-- Search and Add New Employee Button (Responsive) -->
+  <div class="row mb-3">
+    <div class="col-md-8 col-12 mb-2 mb-md-0">
+      <input type="text" class="form-control" placeholder="Search employees..." id="searchInput">
+    </div>
+    <div class="col-md-4 col-12 text-md-end text-center">
+      <button class="btn btn-primary w-100 w-md-auto" onclick="addEmployee()">Add New Employee</button>
+    </div>
+  </div>
+
+  <!-- Employee Table -->
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Position</th>
+          <th>Department</th>
+          <th>Role</th>
+          <th>Salary</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="employeeTableBody">
+        <!-- Example Row -->
+        <tr>
+          <td>1</td>
+          <td>Jane Doe</td>
+          <td>Software Engineer</td>
+          <td>Engineering</td>
+          <td>Developer</td>
+          <td>$100,000</td>
+          <td>
+            <button class="btn btn-warning btn-sm" onclick="editEmployee(1)">Edit</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteEmployee(1)">Delete</button>
+          </td>
+        </tr>
+        <!-- Dynamically populated rows here -->
+      </tbody>
+    </table>
+  </div>
+</div>

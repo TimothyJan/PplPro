@@ -23,32 +23,12 @@ namespace PplPro.Server.Models
         [Required]
         [ForeignKey("Department")]
         public int DepartmentID { get; set; }
-        public Department Department { get; set; }
 
         [Required]
         [ForeignKey("Role")]
         public int RoleID { get; set; }
-        public Role Role { get; set; }
+
+        public Department Department { get; set; } // Add navigation property
+        public Role Role { get; set; } // Add navigation property
     }
-
-    public class Department
-    {
-        [Key]
-        public int DepartmentID { get; set; }
-
-        [Required]
-        [StringLength(50, ErrorMessage = "Department name cannot exceed 50 characters.")]
-        public string DepartmentName { get; set; }
-    }
-
-    public class Role
-    {
-        [Key]
-        public int RoleID { get; set; }
-
-        [Required]
-        [StringLength(50, ErrorMessage = "Role name cannot exceed 50 characters.")]
-        public string RoleName { get; set; }
-    }
-
 }

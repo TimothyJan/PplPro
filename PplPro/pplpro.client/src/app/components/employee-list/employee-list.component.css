@@ -1,0 +1,23 @@
+/* Optional custom styling */
+body {
+  background-color: #f8f9fa;
+}
+
+h2 {
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.table-responsive {
+  margin-top: 15px;
+}
+
+#searchInput {
+  font-size: 1rem;
+}
+
+@media (max-width: 576px) {
+  .table {
+    font-size: 0.9rem;
+  }
+}

@@ -14,19 +14,21 @@ namespace PplPro.Server.Models
         {
             modelBuilder.Entity<Employee>()
                 .HasOne(e => e.Department)
-                .WithMany()
-                .HasForeignKey(e => e.DepartmentID);
+                .WithMany(d => d.Employees) // Navigation property for Employees
+                .HasForeignKey(e => e.DepartmentID)
+                .OnDelete(DeleteBehavior.Restrict); // Prevent cascading deletes for Departments
 
             modelBuilder.Entity<Employee>()
                 .HasOne(e => e.Role)
-                .WithMany()
-                .HasForeignKey(e => e.RoleID);
+                .WithMany(r => r.Employees) // Ensure Role has navigation property for Employees
+                .HasForeignKey(e => e.RoleID)
+                .OnDelete(DeleteBehavior.Restrict); // Prevent cascading deletes for Roles
 
-            modelBuilder.Entity<Department>().HasData(
-                new Department { DepartmentID = 1, DepartmentName = "Human Resources" },
-                new Department { DepartmentID = 2, DepartmentName = "Engineering" }
-            );
+            modelBuilder.Entity<Role>()
+                .HasOne(r => r.Department)
+                .WithMany(d => d.Roles) // Ensure Department has navigation property for Roles
+                .HasForeignKey(r => r.DepartmentID)
+                .OnDelete(DeleteBehavior.Restrict); // Prevent cascading deletes for Roles
         }
     }
-
 }

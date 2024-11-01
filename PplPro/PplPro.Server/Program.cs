@@ -7,14 +7,17 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTION")
                        ?? builder.Configuration.GetConnectionString("AzureSqlDb");
 
-// Register your DbContext here
+// Register DbContext here
 builder.Services.AddDbContext<EmployeeDbContext>(options =>
-    options.UseSqlServer(connectionString ?? throw new InvalidOperationException("Connection string not found.")));
+    options.UseSqlServer(connectionString ?? throw new InvalidOperationException("Connection string not found."),
+        sqlOptions => sqlOptions.EnableRetryOnFailure())); // Enable retry on failure
 
-// Register the IEmployeeRepository and its implementation
+// Register repositories and services for dependency injection
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 
-// Add CORS
+// Configure CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigins",
@@ -29,9 +32,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-
-app.UseDefaultFiles();
-app.UseStaticFiles();
 
 // Middleware pipeline
 if (app.Environment.IsDevelopment())
@@ -51,5 +51,20 @@ app.UseCors("AllowSpecificOrigins");
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Seed initial data for departments and roles
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<EmployeeDbContext>();
+
+    // Apply any pending migrations and seed data
+    if (context.Database.GetPendingMigrations().Any())
+    {
+        context.Database.Migrate();
+    }
+
+    SeedData.Initialize(context);  // Call a seeding method here
+}
 
 app.Run();

@@ -9,6 +9,7 @@ import { Employee } from '../../models/employee';
 })
 export class EmployeeListComponent implements OnInit {
   employees: Employee[] = [];
+  dataFetched: boolean = false;
 
   constructor(private employeeService: EmployeeService) {}
 
@@ -20,6 +21,7 @@ export class EmployeeListComponent implements OnInit {
     this.employeeService.getEmployees().subscribe(data => {
       console.log(data);
       this.employees = data;
+      this.dataFetched = true;
     });
   }
 

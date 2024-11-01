@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PplPro.Server")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a16e42ffe27adb12fdcdb6da7f8a67b4e28322a3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2906748df2f4a100c7df21e05e19f662dd4664d7")]
 [assembly: System.Reflection.AssemblyProductAttribute("PplPro.Server")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PplPro.Server")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

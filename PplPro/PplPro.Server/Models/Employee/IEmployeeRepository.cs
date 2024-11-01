@@ -1,4 +1,7 @@
-﻿namespace PplPro.Server.Models
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace PplPro.Server.Models
 {
     public interface IEmployeeRepository
     {

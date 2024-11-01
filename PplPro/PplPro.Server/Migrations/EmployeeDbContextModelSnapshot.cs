@@ -37,18 +37,6 @@ namespace PplPro.Server.Migrations
                     b.HasKey("DepartmentID");
 
                     b.ToTable("Departments");
-
-                    b.HasData(
-                        new
-                        {
-                            DepartmentID = 1,
-                            DepartmentName = "Human Resources"
-                        },
-                        new
-                        {
-                            DepartmentID = 2,
-                            DepartmentName = "Engineering"
-                        });
                 });
 
             modelBuilder.Entity("PplPro.Server.Models.Employee", b =>
@@ -95,6 +83,9 @@ namespace PplPro.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoleID"));
 
+                    b.Property<int>("DepartmentID")
+                        .HasColumnType("int");
+
                     b.Property<string>("RoleName")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -102,26 +93,51 @@ namespace PplPro.Server.Migrations
 
                     b.HasKey("RoleID");
 
+                    b.HasIndex("DepartmentID");
+
                     b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("PplPro.Server.Models.Employee", b =>
                 {
                     b.HasOne("PplPro.Server.Models.Department", "Department")
-                        .WithMany()
+                        .WithMany("Employees")
                         .HasForeignKey("DepartmentID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("PplPro.Server.Models.Role", "Role")
-                        .WithMany()
+                        .WithMany("Employees")
                         .HasForeignKey("RoleID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Department");
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("PplPro.Server.Models.Role", b =>
+                {
+                    b.HasOne("PplPro.Server.Models.Department", "Department")
+                        .WithMany("Roles")
+                        .HasForeignKey("DepartmentID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("PplPro.Server.Models.Department", b =>
+                {
+                    b.Navigation("Employees");
+
+                    b.Navigation("Roles");
+                });
+
+            modelBuilder.Entity("PplPro.Server.Models.Role", b =>
+                {
+                    b.Navigation("Employees");
                 });
 #pragma warning restore 612, 618
         }
