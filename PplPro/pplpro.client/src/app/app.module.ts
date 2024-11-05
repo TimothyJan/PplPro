@@ -17,6 +17,7 @@ import { DepartmentListComponent } from './components/department-list/department
 import { RoleCreateComponent } from './components/role-create/role-create.component';
 import { RoleListComponent } from './components/role-list/role-list.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     RoleCreateComponent,
     RoleListComponent,
     NavbarComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule, HttpClientModule,
