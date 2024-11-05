@@ -9,15 +9,32 @@ import { LoadingSpinnerComponent } from './components/loading-spinner/loading-sp
 
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { EmployeeCreateComponent } from './components/employee-create/employee-create.component';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DepartmentCreateComponent } from './components/department-create/department-create.component';
+import { DepartmentListComponent } from './components/department-list/department-list.component';
+import { RoleCreateComponent } from './components/role-create/role-create.component';
+import { RoleListComponent } from './components/role-list/role-list.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     EmployeeListComponent,
     LoadingSpinnerComponent,
+    EmployeeCreateComponent,
+    DepartmentCreateComponent,
+    DepartmentListComponent,
+    RoleCreateComponent,
+    RoleListComponent,
+    NavbarComponent,
   ],
   imports: [
     BrowserModule, HttpClientModule,
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     AppRoutingModule,
     MatSlideToggleModule,
     MatProgressSpinnerModule

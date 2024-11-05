@@ -1,5 +1,4 @@
-
-.employee-container {
+.role-container {
   background: rgba(255, 255, 255, 0.1);
   padding: 2rem;
   border-radius: 12px;
@@ -22,7 +21,7 @@
 /* Button Container */
 .button-container {
   display: flex;
-  gap: 0.5rem; /* Add space between buttons */
+  gap: 0.5rem;
   justify-content: center;
 }
 

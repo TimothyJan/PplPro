@@ -1,0 +1,69 @@
+/* Navbar Styling */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: rgba(78, 84, 200, 0.8); /* Semi-transparent background */
+  backdrop-filter: blur(8px); /* Blurry effect */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 1rem 0;
+  z-index: 1000;
+}
+
+.navbar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ffffff;
+  text-decoration: none;
+  margin-right: auto;
+}
+
+/* Ensures the main content starts below the navbar */
+.main-content {
+  padding-top: 5rem;
+  margin: 0;
+}
+
+/* Flex-container styling to stretch across full width */
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Flex items: fill width on mobile and split on larger screens */
+.flex-item {
+  margin: 1rem;
+}
+
+@media (max-width: 768px) {
+  .flex-item {
+    flex: 1 1 100%; /* Full width on mobile screens */
+  }
+}
+
+/* Ensure app-employee-list takes the full width on larger screens */
+app-employee-list,
+app-department-list,
+app-role-list {
+  flex: 1 1 auto; /* Allow to grow and shrink */
+  min-width: 300px; /* Minimum width for smaller devices */
+  width: 100%; /* Take full width on mobile */
+}
+
+/* Additional Media Queries */
+@media (min-width: 768px) {
+  .flex-item {
+    margin: 2rem;
+  }
+}
