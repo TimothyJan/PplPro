@@ -21,7 +21,7 @@ builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigins",
-        policy => policy.WithOrigins("https://127.0.0.1:4200") // Adjust as needed
+        policy => policy.WithOrigins("https://localhost:4200", "https://127.0.0.1:4200") // Adjust as needed
                         .AllowAnyMethod()
                         .AllowAnyHeader());
 });

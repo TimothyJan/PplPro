@@ -8,13 +8,13 @@ import { Employee } from '../models/employee';
 })
 export class EmployeeService {
 
-  // private apiUrl = 'https://localhost:7040/api/employee';
+  private apiUrl = 'https://localhost:7040/api/employee';
 
-  // constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-  // getEmployees(): Observable<Employee[]> {
-  //   return this.http.get<Employee[]>(this.apiUrl);
-  // }
+  getEmployees(): Observable<Employee[]> {
+    return this.http.get<Employee[]>(this.apiUrl);
+  }
 
   // getEmployee(id: number): Observable<Employee> {
   //   return this.http.get<Employee>(`${this.apiUrl}/${id}`);
@@ -41,12 +41,12 @@ export class EmployeeService {
     new Employee(3, "David Brown", "Software Engineer", 90000, 2, 6),
   ];
 
-  constructor() { }
+  // constructor() { }
 
   /** Get Employees */
-  getEmployees(): Employee[] {
-    return this.employees;
-  }
+  // getEmployees(): Employee[] {
+  //   return this.employees;
+  // }
 
   /** Get Employee based on id */
   getEmployee(id: number): Employee | undefined {

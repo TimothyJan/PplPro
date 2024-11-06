@@ -29,7 +29,9 @@ export class RoleCreateComponent implements OnInit{
 
   /** Get departments from Department Service */
   getDepartments(): void {
-    this.departments = this._departmentService.getDepartments();
+    this._departmentService.getDepartments().subscribe(data => {
+      this.departments = data;
+    });
   }
 
   onSubmit(): void {

@@ -1,59 +1,44 @@
 import { Injectable } from '@angular/core';
 import { Department } from '../models/department';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { catchError, Observable, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DepartmentService {
 
-  departmentID: number = 3;
+  private apiUrl = 'https://localhost:7040/api/department';
 
-  departments: Department[] = [
-    new Department(0, "Finance"),
-    new Department(1, "Human Resources"),
-    new Department(2, "Information Technology")
-  ];
+  constructor(private http: HttpClient) { }
 
-  constructor() { }
-
-  /** Get Departments */
-  getDepartments(): Department[] {
-    return this.departments;
+  getDepartments(): Observable<Department[]> {
+    return this.http.get<Department[]>(this.apiUrl)
+      .pipe(catchError(this.handleError));
   }
 
-  /** Get Departments based on id */
-  getDepartment(id: number): Department | undefined {
-    for(let i=0; i<this.departments.length; i++) {
-      if(this.departments[i].departmentID == id) {
-        return this.departments[i];
-      }
+  addDepartment(department: Department): Observable<void> {
+    return this.http.post<void>(this.apiUrl, department)
+      .pipe(catchError(this.handleError));
+  }
+
+  updateDepartment(department: Department): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${department.departmentID}`, department)
+      .pipe(catchError(this.handleError));
+  }
+
+  deleteDepartment(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    let errorMessage = 'An unknown error occurred!';
+    if (error.error instanceof ErrorEvent) {
+      errorMessage = `Client-side error: ${error.error.message}`;
+    } else {
+      errorMessage = `Server-side error: ${error.status} - ${error.message}`;
     }
-    return undefined
+    return throwError(() => new Error(errorMessage));
   }
-
-  /** Post new Department */
-  addDepartment(department: Department): void {
-    let newDepartment = new Department(this.departmentID++, department.departmentName);
-    this.departments.push(newDepartment);
-    // console.log(this.departments);
-  }
-
-  /** Update existing Department based on id */
-  updateDepartment(department: Department): void {
-    for(let i=0; i<this.departments.length; i++) {
-      if(this.departments[i].departmentID == department.departmentID) {
-        this.departments[i] = department;
-      }
-    }
-  }
-
-  /** Delete Department based on id */
-  deleteDepartment(id: number): void {
-    for(let i=0; i<this.departments.length; i++) {
-      if(this.departments[i].departmentID == id) {
-        this.departments.splice(i, 1);
-      }
-    }
-  }
-
 }

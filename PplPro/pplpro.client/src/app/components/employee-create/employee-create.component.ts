@@ -31,7 +31,9 @@ export class EmployeeCreateComponent implements OnInit{
   ) {}
 
   ngOnInit(): void {
-    this.departments = this._departmentService.getDepartments();
+    this._departmentService.getDepartments().subscribe(data => {
+      this.departments = data;
+    });
 
     // Listen to changes on departmentID and update roles accordingly
     this.departmentSelectionChange();

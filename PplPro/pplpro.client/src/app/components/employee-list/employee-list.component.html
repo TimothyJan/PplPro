@@ -14,7 +14,7 @@
           <th>Actions</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody *ngIf="dataFetched; else loadingBlock">
         <tr *ngFor="let employee of employees">
           <td>{{ employee.employeeID }}</td>
 
@@ -93,3 +93,7 @@
     </table>
   </div>
 </div>
+
+<ng-template #loadingBlock>
+  <app-loading-spinner [isLoading]="!dataFetched"></app-loading-spinner>
+</ng-template>

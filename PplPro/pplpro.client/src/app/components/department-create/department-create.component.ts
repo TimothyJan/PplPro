@@ -5,20 +5,32 @@ import { DepartmentService } from '../../services/department.service';
 @Component({
   selector: 'app-department-create',
   templateUrl: './department-create.component.html',
-  styleUrl: './department-create.component.css'
+  styleUrls: ['./department-create.component.css']
 })
 export class DepartmentCreateComponent {
   departmentForm: FormGroup = new FormGroup({
-    departmentName: new FormControl("", [Validators.required, Validators.minLength(2), Validators.maxLength(50)])
+    departmentName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(50)])
   });
+  isLoading: boolean = false;
+  successMessage: string | null = null;
+  errorMessage: string | null = null;
 
-  constructor(private _departmentService: DepartmentService) {}
+  constructor(private departmentService: DepartmentService) {}
 
   onSubmit(): void {
     if (this.departmentForm.valid) {
-      // console.log('Form Submitted:', this.departmentForm.value);
-      this._departmentService.addDepartment(this.departmentForm.value);
-      this.departmentForm.reset();
+      this.isLoading = true;
+      this.departmentService.addDepartment(this.departmentForm.value).subscribe({
+        next: () => {
+          this.successMessage = 'Department added successfully!';
+          this.isLoading = false;
+          this.departmentForm.reset();
+        },
+        error: (error) => {
+          this.errorMessage = error.message;
+          this.isLoading = false;
+        }
+      });
     }
   }
 }

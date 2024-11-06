@@ -19,6 +19,7 @@ export class EmployeeListComponent implements OnInit {
   editModeEmployeeId: number | null = null;
   originalRoleID: number | null = null;
   rolePlaceholderID = 0;  // Placeholder value for unselected role
+  dataFetched: boolean = false;
 
   constructor(
     private _employeeService: EmployeeService,
@@ -28,18 +29,27 @@ export class EmployeeListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadEmployees();
-    this.departments = this._departmentService.getDepartments();
+    this._departmentService.getDepartments().subscribe(data => {
+      this.departments = data;
+    });
     this.roles = this._roleService.getRoles();
   }
 
   /** Load all Employees */
   loadEmployees(): void {
-    this.employees = this._employeeService.getEmployees();
+    this._employeeService.getEmployees().subscribe(data => {
+      // console.log(data);
+      this.employees = data;
+      this.dataFetched = true;
+    });
   }
 
   /** Get Department name from DepartmentID */
   getDepartmentName(departmentID: number): string | undefined {
-    return this._departmentService.getDepartment(departmentID)?.departmentName;
+    // this._departmentService.getDepartment(departmentID).subscribe(data => {
+    //   return data.departmentName;
+    // });
+    return undefined;
   }
 
   /** Get Role name from RoleID */
