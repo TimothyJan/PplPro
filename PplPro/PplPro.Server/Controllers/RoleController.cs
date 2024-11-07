@@ -59,5 +59,13 @@ namespace PplPro.Server.Controllers
             await _roleRepository.DeleteRoleAsync(id);
             return NoContent();
         }
+
+        [HttpGet("GetRolesFromDepartmentID/{departmentId}")]
+        public async Task<ActionResult<IEnumerable<RoleDTO>>> GetRolesFromDepartmentID(int departmentId)
+        {
+            var roles = await _roleRepository.GetRolesByDepartmentIdAsync(departmentId);
+            return Ok(roles);
+        }
+
     }
 }

@@ -10,13 +10,14 @@ import { RoleService } from '../../services/role.service';
   styleUrl: './role-create.component.css'
 })
 export class RoleCreateComponent implements OnInit{
-
-  departments: Department[] = [];
-
   roleForm: FormGroup = new FormGroup({
     roleName: new FormControl("", [Validators.required, Validators.minLength(2), Validators.maxLength(50)]),
     departmentID: new FormControl(null, Validators.required)
   });
+  departments: Department[] = [];
+  isLoading: boolean = false;
+  successMessage: string | null = null;
+  errorMessage: string | null = null;
 
   constructor(
     private _roleService: RoleService,
@@ -36,13 +37,23 @@ export class RoleCreateComponent implements OnInit{
 
   onSubmit(): void {
     if (this.roleForm.valid) {
+      this.isLoading = true;
       const formValue = {
         ...this.roleForm.value,
         departmentID: Number(this.roleForm.value.departmentID)
       };
       // console.log('Form Submitted:', formValue);
-      this._roleService.addRole(formValue);
-      this.roleForm.reset();
+      this._roleService.addRole(this.roleForm.value).subscribe({
+        next: () => {
+          this.successMessage = 'Department added successfully!';
+          this.isLoading = false;
+          this.roleForm.reset();
+        },
+        error: (error) => {
+          this.errorMessage = error.message;
+          this.isLoading = false;
+        }
+      });
     }
   }
 

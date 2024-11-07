@@ -1,77 +1,55 @@
 import { Injectable } from '@angular/core';
 import { Role } from '../models/role';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, catchError, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RoleService {
 
-  roleID: number = 10;
+  private apiUrl = 'https://localhost:7040/api/role';
 
-  roles: Role[] = [
-    new Role(0, "Accountant", 0),
-    new Role(1, "Financial Analyst", 0),
-    new Role(2, "Finance Manager", 0),
-    new Role(3, "HR Assistant", 1),
-    new Role(4, "HR Specialist", 1),
-    new Role(5, "HR Director", 1),
-    new Role(6, "Software Engineer", 2),
-    new Role(7, "Front-End Developer", 2),
-    new Role(8, "Back-End Developer", 2),
-    new Role(9, "Full-Stack Developer", 2),
-  ];
+  constructor(private http: HttpClient) { }
 
-  constructor() { }
-
-  /** Get Roles */
-  getRoles(): Role[] {
-    return this.roles;
+  getRoles(): Observable<Role[]> {
+    return this.http.get<Role[]>(this.apiUrl)
+      .pipe(catchError(this.handleError));
   }
 
-  /** Get Roles based on DepartmenIDd */
-  getRolesFromDepartmentID(departmentID: number) {
-    let departmentRoles = [];
-    for(let i=0; i<this.roles.length; i++) {
-      if(this.roles[i].departmentID == departmentID) {
-        departmentRoles.push(this.roles[i]);
-      }
+  getRoleById(id: number): Observable<Role> {
+    return this.http.get<Role>(`${this.apiUrl}/${id}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  getRolesFromDepartmentID(departmentID: number): Observable<Role[]> {
+    return this.http.get<Role[]>(`${this.apiUrl}/GetRolesFromDepartmentID/${departmentID}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  addRole(role: Role): Observable<void> {
+    return this.http.post<void>(this.apiUrl, role)
+      .pipe(catchError(this.handleError));
+  }
+
+  updateRole(role: Role): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${role.roleID}`, role)
+      .pipe(catchError(this.handleError));
+  }
+
+  deleteRole(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    let errorMessage = 'An unknown error occurred!';
+    if (error.error instanceof ErrorEvent) {
+      errorMessage = `Client-side error: ${error.error.message}`;
+    } else {
+      errorMessage = `Server-side error: ${error.status} - ${error.message}`;
     }
-    return departmentRoles
-  }
-
-  /** Get Role based on id */
-  getRole(id: number): Role | undefined {
-    for(let i=0; i<this.roles.length; i++) {
-      if(this.roles[i].roleID == id) {
-        return this.roles[i];
-      }
-    }
-    return undefined
-  }
-
-  /** Post new Role */
-  addRole(role: Role): void {
-    let newRole = new Role(this.roleID++, role.roleName, role.departmentID);
-    this.roles.push(newRole);
-    // console.log(this.roles);
-  }
-
-  /** Update existing Role based on id */
-  updateRole(role: Role): void {
-    for(let i=0; i<this.roles.length; i++) {
-      if(this.roles[i].roleID == role.roleID) {
-        this.roles[i] = role;
-      }
-    }
-  }
-
-  /** Delete Role based on id */
-  deleteRole(id: number): void {
-    for(let i=0; i<this.roles.length; i++) {
-      if(this.roles[i].roleID == id) {
-        this.roles.splice(i, 1);
-      }
-    }
+    return throwError(() => new Error(errorMessage));
   }
 
 }

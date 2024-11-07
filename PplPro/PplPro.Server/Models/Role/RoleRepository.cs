@@ -68,6 +68,20 @@ namespace PplPro.Server.Models
             _context.Roles.Remove(role);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<RoleDTO>> GetRolesByDepartmentIdAsync(int departmentId)
+        {
+            return await _context.Roles
+                .Where(r => r.DepartmentID == departmentId)
+                .Select(r => new RoleDTO
+                {
+                    RoleID = r.RoleID,
+                    RoleName = r.RoleName,
+                    DepartmentID = r.DepartmentID
+                })
+                .ToListAsync();
+        }
+
     }
 
 }

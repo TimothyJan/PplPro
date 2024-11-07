@@ -10,6 +10,7 @@ namespace PplPro.Server.Models
         Task AddRoleAsync(RoleDTO roleDto);
         Task UpdateRoleAsync(RoleDTO roleDto);
         Task DeleteRoleAsync(int id);
+        Task<IEnumerable<RoleDTO>> GetRolesByDepartmentIdAsync(int departmentId);
     }
 
 }

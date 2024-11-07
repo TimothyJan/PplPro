@@ -17,6 +17,11 @@ export class DepartmentService {
       .pipe(catchError(this.handleError));
   }
 
+  getDepartmentById(id: number): Observable<Department> {
+    return this.http.get<Department>(`${this.apiUrl}/${id}`)
+      .pipe(catchError(this.handleError));
+  }
+
   addDepartment(department: Department): Observable<void> {
     return this.http.post<void>(this.apiUrl, department)
       .pipe(catchError(this.handleError));

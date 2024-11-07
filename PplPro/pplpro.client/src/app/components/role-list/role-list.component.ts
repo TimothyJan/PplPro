@@ -1,15 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Role } from '../../models/role';
 import { RoleService } from '../../services/role.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-role-list',
   templateUrl: './role-list.component.html',
   styleUrl: './role-list.component.css'
 })
-export class RoleListComponent implements OnInit{
+export class RoleListComponent implements OnInit, OnDestroy {
   roles: Role[] = [];
   editModeRoleId: number | null = null;
+  dataFetched: boolean = false;
+  successMessage: string | null = null;
+  errorMessage: string | null = null;
+  isLoading: boolean = false;
+  private unsubscribe$ = new Subject<void>();
 
   constructor(private _roleService: RoleService) {}
 
@@ -17,29 +23,56 @@ export class RoleListComponent implements OnInit{
     this.loadRoles();
   }
 
-  /** Load all roles */
   loadRoles(): void {
-    this.roles = this._roleService.getRoles();
+    this.isLoading = true;
+    this._roleService.getRoles()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (data) => {
+          this.roles = data;
+          this.dataFetched = true;
+          this.isLoading = false;
+        },
+        error: (err) => {
+          this.errorMessage = err.message;
+          this.isLoading = false;
+        }
+      });
   }
 
-  /** Enter Edit mode for editting role list */
-  enterEditMode(roleId: number): void {
-    this.editModeRoleId = roleId;
+  enterEditMode(departmentId: number): void {
+    this.editModeRoleId = departmentId;
   }
 
-  /** Leave Edit mode and save changes */
-  saveChanges(role: Role): void {
-    this._roleService.updateRole(role);
-    this.editModeRoleId = null;
-    this.loadRoles(); // Reload roles to reflect changes
+  saveChanges(department: Role): void {
+    this._roleService.updateRole(department)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: () => {
+          this.successMessage = 'Role updated successfully!';
+          this.editModeRoleId = null;
+          this.loadRoles();
+        },
+        error: (err) => this.errorMessage = err.message
+      });
   }
 
-  /** Delete Role */
-  onDelete(roleID: number): void {
-    const confirmDelete = confirm('Are you sure you want to delete this role?');
-    if (confirmDelete) {
-      this._roleService.deleteRole(roleID);
-      this.loadRoles(); // Reload roles after deletion
+  onDelete(departmentID: number): void {
+    if (confirm('Are you sure you want to delete this department?')) {
+      this._roleService.deleteRole(departmentID)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe({
+          next: () => {
+            this.successMessage = 'Role deleted successfully!';
+            this.loadRoles();
+          },
+          error: (err) => this.errorMessage = err.message
+        });
     }
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }
