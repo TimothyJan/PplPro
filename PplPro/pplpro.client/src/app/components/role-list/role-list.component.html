@@ -6,6 +6,7 @@
       <thead>
         <tr>
           <th>Role ID</th>
+          <th>Department</th>
           <th>Role Name</th>
           <th>Actions</th>
         </tr>
@@ -13,12 +14,27 @@
       <tbody>
         <tr *ngFor="let role of roles">
           <td>{{ role.roleID }}</td>
+
+          <!-- Department Dropdown -->
+          <td *ngIf="editModeRoleId === role.roleID">
+            <select [(ngModel)]="role.departmentID" class="form-control">
+              <option *ngFor="let dept of departments" [value]="dept.departmentID">
+                {{ dept.departmentName }}
+              </option>
+            </select>
+          </td>
+          <td *ngIf="editModeRoleId !== role.roleID">
+            {{ getDepartmentName(role.departmentID) }}
+          </td>
+
+          <!-- Role Name Field -->
           <td *ngIf="editModeRoleId === role.roleID">
             <input type="text" [(ngModel)]="role.roleName" class="form-control">
           </td>
           <td *ngIf="editModeRoleId !== role.roleID">
             {{ role.roleName }}
           </td>
+
           <td>
             <div class="button-container">
               <button *ngIf="editModeRoleId !== role.roleID"

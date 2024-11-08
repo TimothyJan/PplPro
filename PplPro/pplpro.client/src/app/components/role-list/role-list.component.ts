@@ -2,6 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Role } from '../../models/role';
 import { RoleService } from '../../services/role.service';
 import { Subject, takeUntil } from 'rxjs';
+import { Department } from '../../models/department';
+import { DepartmentService } from '../../services/department.service';
 
 @Component({
   selector: 'app-role-list',
@@ -10,6 +12,7 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class RoleListComponent implements OnInit, OnDestroy {
   roles: Role[] = [];
+  departments: Department[] = [];
   editModeRoleId: number | null = null;
   dataFetched: boolean = false;
   successMessage: string | null = null;
@@ -17,12 +20,17 @@ export class RoleListComponent implements OnInit, OnDestroy {
   isLoading: boolean = false;
   private unsubscribe$ = new Subject<void>();
 
-  constructor(private _roleService: RoleService) {}
+  constructor(
+    private _roleService: RoleService,
+    private _departmentService: DepartmentService
+  ) {}
 
   ngOnInit(): void {
     this.loadRoles();
+    this.loadDepartments();
   }
 
+  /** Load Roles */
   loadRoles(): void {
     this.isLoading = true;
     this._roleService.getRoles()
@@ -40,8 +48,31 @@ export class RoleListComponent implements OnInit, OnDestroy {
       });
   }
 
-  enterEditMode(departmentId: number): void {
-    this.editModeRoleId = departmentId;
+  loadDepartments(): void {
+    this.isLoading = true;
+    this._departmentService.getDepartments()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (data) => {
+          this.departments = data;
+          this.dataFetched = true;
+          this.isLoading = false;
+        },
+        error: (err) => {
+          this.errorMessage = err.message;
+          this.isLoading = false;
+        }
+      });
+  }
+
+  /** Get Department name from DepartmentID */
+  getDepartmentName(departmentID: number): string | undefined {
+    const department = this.departments.find(dep => dep.departmentID == departmentID);
+    return department ? department.departmentName : undefined;
+  }
+
+  enterEditMode(roleId: number): void {
+    this.editModeRoleId = roleId;
   }
 
   saveChanges(department: Role): void {

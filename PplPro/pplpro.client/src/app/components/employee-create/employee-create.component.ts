@@ -5,6 +5,7 @@ import { Role } from '../../models/role';
 import { DepartmentService } from '../../services/department.service';
 import { EmployeeService } from '../../services/employee.service';
 import { RoleService } from '../../services/role.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-employee-create',
@@ -12,10 +13,6 @@ import { RoleService } from '../../services/role.service';
   styleUrl: './employee-create.component.css'
 })
 export class EmployeeCreateComponent implements OnInit{
-
-  departments: Department[] = []; // Array to hold department data
-  roles: Role[] = []; // Array to hold role data
-
   employeeForm: FormGroup = new FormGroup({
     name: new FormControl("", [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
     position: new FormControl("", [Validators.required, Validators.maxLength(50)]),
@@ -23,6 +20,13 @@ export class EmployeeCreateComponent implements OnInit{
     departmentID: new FormControl(null, Validators.required),
     roleID: new FormControl(null, Validators.required)
   });
+  departments: Department[] = [];
+  roles: Role[] = [];
+  dataFetched: boolean = false;
+  isLoading: boolean = false;
+  successMessage: string | null = null;
+  errorMessage: string | null = null;
+  private unsubscribe$ = new Subject<void>();
 
   constructor(
     private _employeeService: EmployeeService,
@@ -53,19 +57,41 @@ export class EmployeeCreateComponent implements OnInit{
 
   /** Roles array is updated to selected departmentID Department roles */
   getRolesFromDepartmentID(departmentID: number): void {
-    this.roles = this._roleService.getRolesFromDepartmentID(departmentID);
+    this._roleService.getRolesFromDepartmentID(departmentID)
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe({
+      next: (data) => {
+        this.roles = data;
+        this.dataFetched = true;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.errorMessage = err.message;
+        this.isLoading = false;
+      }
+    });
   }
 
   onSubmit(): void {
     if (this.employeeForm.valid) {
+      this.isLoading = true;
       const formValue = {
         ...this.employeeForm.value,
         departmentID: Number(this.employeeForm.value.departmentID),
         roleID: Number(this.employeeForm.value.roleID),
       }
       // console.log('Form Submitted:', formValue);
-      this._employeeService.addEmployee(formValue);
-      this.employeeForm.reset();
+      this._employeeService.addEmployee(this.employeeForm.value).subscribe({
+        next: () => {
+          this.successMessage = 'Department added successfully!';
+          this.isLoading = false;
+          this.employeeForm.reset();
+        },
+        error: (error) => {
+          this.errorMessage = error.message;
+          this.isLoading = false;
+        }
+      });
     }
   }
 }
