@@ -1,12 +1,14 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Observable, throwError } from 'rxjs';
+import { catchError, Observable, Subject, throwError } from 'rxjs';
 import { Employee } from '../models/employee';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EmployeeService {
+  private employeeAddedSource = new Subject<void>(); //Emit events when employee is added
+  employeeAdded$ = this.employeeAddedSource.asObservable();
 
   private apiUrl = 'https://localhost:7040/api/employee';
 
@@ -45,5 +47,9 @@ export class EmployeeService {
       errorMessage = `Server-side error: ${error.status} - ${error.message}`;
     }
     return throwError(() => new Error(errorMessage));
+  }
+
+  notifyEmployeeAdded(): void {
+    this.employeeAddedSource.next();
   }
 }

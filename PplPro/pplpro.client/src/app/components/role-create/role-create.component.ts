@@ -48,6 +48,7 @@ export class RoleCreateComponent implements OnInit{
           this.successMessage = 'Department added successfully!';
           this.isLoading = false;
           this.roleForm.reset();
+          this._roleService.notifyRoleAdded();
         },
         error: (error) => {
           this.errorMessage = error.message;

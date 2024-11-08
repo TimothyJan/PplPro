@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Role } from '../models/role';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, catchError, throwError } from 'rxjs';
+import { Observable, Subject, catchError, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RoleService {
+  private roleAddedSource = new Subject<void>();  // Emit events when role is added
+  roleAdded$ = this.roleAddedSource.asObservable();
 
   private apiUrl = 'https://localhost:7040/api/role';
 
@@ -50,6 +52,10 @@ export class RoleService {
       errorMessage = `Server-side error: ${error.status} - ${error.message}`;
     }
     return throwError(() => new Error(errorMessage));
+  }
+
+  notifyRoleAdded(): void {
+    this.roleAddedSource.next();
   }
 
 }

@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Department } from '../models/department';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { catchError, Observable, throwError } from 'rxjs';
+import { catchError, Observable, Subject, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DepartmentService {
+  private departmentAddedSource = new Subject<void>();  // Emit events when department is added
+  departmentAdded$ = this.departmentAddedSource.asObservable();
 
   private apiUrl = 'https://localhost:7040/api/department';
 
@@ -45,5 +47,9 @@ export class DepartmentService {
       errorMessage = `Server-side error: ${error.status} - ${error.message}`;
     }
     return throwError(() => new Error(errorMessage));
+  }
+
+  notifyDepartmentAdded(): void {
+    this.departmentAddedSource.next();
   }
 }

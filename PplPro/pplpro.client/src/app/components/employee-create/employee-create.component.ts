@@ -86,6 +86,7 @@ export class EmployeeCreateComponent implements OnInit{
           this.successMessage = 'Department added successfully!';
           this.isLoading = false;
           this.employeeForm.reset();
+          this._employeeService.notifyEmployeeAdded();
         },
         error: (error) => {
           this.errorMessage = error.message;

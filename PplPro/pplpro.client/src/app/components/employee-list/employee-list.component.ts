@@ -38,6 +38,12 @@ export class EmployeeListComponent implements OnInit {
     this.loadEmployees();
     this.loadDepartments();
     this.loadRoles();
+
+    this._employeeService.employeeAdded$
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(() => {
+      this.loadEmployees();
+    })
   }
 
   /** Load all Employees */

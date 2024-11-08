@@ -28,6 +28,12 @@ export class RoleListComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loadRoles();
     this.loadDepartments();
+
+    this._roleService.roleAdded$
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(() => {
+      this.loadRoles()
+    });
   }
 
   /** Load Roles */

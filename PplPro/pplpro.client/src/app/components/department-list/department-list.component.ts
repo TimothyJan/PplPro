@@ -21,6 +21,13 @@ export class DepartmentListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadDepartments();
+
+    // Subscribe to the department added notification
+    this._departmentService.departmentAdded$
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(() => {
+      this.loadDepartments();  // Reload departments when a new one is added
+    });
   }
 
   loadDepartments(): void {

@@ -25,6 +25,7 @@ export class DepartmentCreateComponent {
           this.successMessage = 'Department added successfully!';
           this.isLoading = false;
           this.departmentForm.reset();
+          this.departmentService.notifyDepartmentAdded();
         },
         error: (error) => {
           this.errorMessage = error.message;
