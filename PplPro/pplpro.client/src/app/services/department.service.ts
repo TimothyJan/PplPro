@@ -3,6 +3,8 @@ import { Department } from '../models/department';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, Observable, Subject, throwError } from 'rxjs';
 
+const apiUrl = 'https://localhost:7040/api/department';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -10,32 +12,30 @@ export class DepartmentService {
   private departmentsChangedSource = new Subject<void>();  // Emit events when department is added
   departmentsChanged$ = this.departmentsChangedSource.asObservable();
 
-  private apiUrl = 'https://localhost:7040/api/department';
-
   constructor(private http: HttpClient) { }
 
   getDepartments(): Observable<Department[]> {
-    return this.http.get<Department[]>(this.apiUrl)
+    return this.http.get<Department[]>(apiUrl)
       .pipe(catchError(this.handleError));
   }
 
   getDepartmentById(id: number): Observable<Department> {
-    return this.http.get<Department>(`${this.apiUrl}/${id}`)
+    return this.http.get<Department>(`${apiUrl}/${id}`)
       .pipe(catchError(this.handleError));
   }
 
   addDepartment(department: Department): Observable<void> {
-    return this.http.post<void>(this.apiUrl, department)
+    return this.http.post<void>(apiUrl, department)
       .pipe(catchError(this.handleError));
   }
 
   updateDepartment(department: Department): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/${department.departmentID}`, department)
+    return this.http.put<void>(`${apiUrl}/${department.departmentID}`, department)
       .pipe(catchError(this.handleError));
   }
 
   deleteDepartment(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`)
+    return this.http.delete<void>(`${apiUrl}/${id}`)
       .pipe(catchError(this.handleError));
   }
 

@@ -3,6 +3,8 @@ import { Role } from '../models/role';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, Subject, catchError, throwError } from 'rxjs';
 
+const apiUrl = 'https://localhost:7040/api/role';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -10,37 +12,35 @@ export class RoleService {
   private rolesChangedSource = new Subject<void>();  // Emit events when role is added
   rolesChanged$ = this.rolesChangedSource.asObservable();
 
-  private apiUrl = 'https://localhost:7040/api/role';
-
   constructor(private http: HttpClient) { }
 
   getRoles(): Observable<Role[]> {
-    return this.http.get<Role[]>(this.apiUrl)
+    return this.http.get<Role[]>(apiUrl)
       .pipe(catchError(this.handleError));
   }
 
   getRoleById(id: number): Observable<Role> {
-    return this.http.get<Role>(`${this.apiUrl}/${id}`)
+    return this.http.get<Role>(`${apiUrl}/${id}`)
       .pipe(catchError(this.handleError));
   }
 
   getRolesFromDepartmentID(departmentID: number): Observable<Role[]> {
-    return this.http.get<Role[]>(`${this.apiUrl}/GetRolesFromDepartmentID/${departmentID}`)
+    return this.http.get<Role[]>(`${apiUrl}/GetRolesFromDepartmentID/${departmentID}`)
       .pipe(catchError(this.handleError));
   }
 
   addRole(role: Role): Observable<void> {
-    return this.http.post<void>(this.apiUrl, role)
+    return this.http.post<void>(apiUrl, role)
       .pipe(catchError(this.handleError));
   }
 
   updateRole(role: Role): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/${role.roleID}`, role)
+    return this.http.put<void>(`${apiUrl}/${role.roleID}`, role)
       .pipe(catchError(this.handleError));
   }
 
   deleteRole(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`)
+    return this.http.delete<void>(`${apiUrl}/${id}`)
       .pipe(catchError(this.handleError));
   }
 
