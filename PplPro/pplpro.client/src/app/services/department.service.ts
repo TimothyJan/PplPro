@@ -7,8 +7,8 @@ import { catchError, Observable, Subject, throwError } from 'rxjs';
   providedIn: 'root'
 })
 export class DepartmentService {
-  private departmentAddedSource = new Subject<void>();  // Emit events when department is added
-  departmentAdded$ = this.departmentAddedSource.asObservable();
+  private departmentsChangedSource = new Subject<void>();  // Emit events when department is added
+  departmentsChanged$ = this.departmentsChangedSource.asObservable();
 
   private apiUrl = 'https://localhost:7040/api/department';
 
@@ -49,7 +49,7 @@ export class DepartmentService {
     return throwError(() => new Error(errorMessage));
   }
 
-  notifyDepartmentAdded(): void {
-    this.departmentAddedSource.next();
+  notifyDepartmentsChanged(): void {
+    this.departmentsChangedSource.next();
   }
 }

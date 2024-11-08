@@ -12,24 +12,21 @@ export class DepartmentCreateComponent {
     departmentName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(50)])
   });
   isLoading: boolean = false;
-  successMessage: string | null = null;
-  errorMessage: string | null = null;
 
-  constructor(private departmentService: DepartmentService) {}
+  constructor(private _departmentService: DepartmentService) {}
 
   onSubmit(): void {
     if (this.departmentForm.valid) {
       this.isLoading = true;
-      this.departmentService.addDepartment(this.departmentForm.value).subscribe({
+      this._departmentService.addDepartment(this.departmentForm.value).subscribe({
         next: () => {
-          this.successMessage = 'Department added successfully!';
           this.isLoading = false;
           this.departmentForm.reset();
-          this.departmentService.notifyDepartmentAdded();
+          this._departmentService.notifyDepartmentsChanged();
         },
         error: (error) => {
-          this.errorMessage = error.message;
           this.isLoading = false;
+          console.log(error.message);
         }
       });
     }

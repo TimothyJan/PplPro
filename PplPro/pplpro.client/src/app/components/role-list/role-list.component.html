@@ -1,6 +1,8 @@
 <div class="role-container text-center">
   <h1 class="display-4 mb-4">Role List</h1>
 
+  <div *ngIf="isLoading" class="text-center">Loading...</div>
+
   <div class="table-responsive">
     <table class="table table-hover table-striped">
       <thead>

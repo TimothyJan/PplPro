@@ -7,8 +7,8 @@ import { Observable, Subject, catchError, throwError } from 'rxjs';
   providedIn: 'root'
 })
 export class RoleService {
-  private roleAddedSource = new Subject<void>();  // Emit events when role is added
-  roleAdded$ = this.roleAddedSource.asObservable();
+  private rolesChangedSource = new Subject<void>();  // Emit events when role is added
+  rolesChanged$ = this.rolesChangedSource.asObservable();
 
   private apiUrl = 'https://localhost:7040/api/role';
 
@@ -54,8 +54,8 @@ export class RoleService {
     return throwError(() => new Error(errorMessage));
   }
 
-  notifyRoleAdded(): void {
-    this.roleAddedSource.next();
+  notifyRolesChanged(): void {
+    this.rolesChangedSource.next();
   }
 
 }

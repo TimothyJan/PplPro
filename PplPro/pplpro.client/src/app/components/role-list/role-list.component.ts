@@ -14,9 +14,6 @@ export class RoleListComponent implements OnInit, OnDestroy {
   roles: Role[] = [];
   departments: Department[] = [];
   editModeRoleId: number | null = null;
-  dataFetched: boolean = false;
-  successMessage: string | null = null;
-  errorMessage: string | null = null;
   isLoading: boolean = false;
   private unsubscribe$ = new Subject<void>();
 
@@ -26,34 +23,11 @@ export class RoleListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.loadRoles();
     this.loadDepartments();
-
-    this._roleService.roleAdded$
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(() => {
-      this.loadRoles()
-    });
+    this.loadRoles();
   }
 
-  /** Load Roles */
-  loadRoles(): void {
-    this.isLoading = true;
-    this._roleService.getRoles()
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe({
-        next: (data) => {
-          this.roles = data;
-          this.dataFetched = true;
-          this.isLoading = false;
-        },
-        error: (err) => {
-          this.errorMessage = err.message;
-          this.isLoading = false;
-        }
-      });
-  }
-
+  /** Load Departments and subscribe to Departments */
   loadDepartments(): void {
     this.isLoading = true;
     this._departmentService.getDepartments()
@@ -61,14 +35,44 @@ export class RoleListComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (data) => {
           this.departments = data;
-          this.dataFetched = true;
           this.isLoading = false;
         },
-        error: (err) => {
-          this.errorMessage = err.message;
+        error: (error) => {
+          console.log(error.message);
           this.isLoading = false;
         }
       });
+
+    // Subscribe to the department added notification
+    this._departmentService.departmentsChanged$
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(() => {
+      this.loadDepartments();  // Reload departments when a new one is added
+    });
+  }
+
+  /** Load Roles and subscribe to Roles */
+  loadRoles(): void {
+    this.isLoading = true;
+    this._roleService.getRoles()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (data) => {
+          this.roles = data;
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.log(error.message);
+          this.isLoading = false;
+        }
+      });
+
+    // Subscribe to the role added notification
+    this._roleService.rolesChanged$
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(() => {
+      this.loadRoles(); // Reload roles when a new one is added
+    });
   }
 
   /** Get Department name from DepartmentID */
@@ -86,11 +90,12 @@ export class RoleListComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: () => {
-          this.successMessage = 'Role updated successfully!';
           this.editModeRoleId = null;
           this.loadRoles();
         },
-        error: (err) => this.errorMessage = err.message
+        error: (error) => {
+          console.log(error.message);
+        }
       });
   }
 
@@ -100,10 +105,11 @@ export class RoleListComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe({
           next: () => {
-            this.successMessage = 'Role deleted successfully!';
             this.loadRoles();
           },
-          error: (err) => this.errorMessage = err.message
+          error: (error) => {
+            console.log(error.message);
+          }
         });
     }
   }

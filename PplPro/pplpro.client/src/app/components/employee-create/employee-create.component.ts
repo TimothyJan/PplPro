@@ -22,10 +22,7 @@ export class EmployeeCreateComponent implements OnInit{
   });
   departments: Department[] = [];
   roles: Role[] = [];
-  dataFetched: boolean = false;
   isLoading: boolean = false;
-  successMessage: string | null = null;
-  errorMessage: string | null = null;
   private unsubscribe$ = new Subject<void>();
 
   constructor(
@@ -35,12 +32,34 @@ export class EmployeeCreateComponent implements OnInit{
   ) {}
 
   ngOnInit(): void {
-    this._departmentService.getDepartments().subscribe(data => {
-      this.departments = data;
-    });
+    this.loadDepartments();
 
     // Listen to changes on departmentID and update roles accordingly
     this.departmentSelectionChange();
+  }
+
+  /** Load Departments and subscribe to Departments */
+  loadDepartments(): void {
+    this.isLoading = true;
+    this._departmentService.getDepartments()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (data) => {
+          this.departments = data;
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.log(error.message);
+          this.isLoading = false;
+        }
+      });
+
+    // Subscribe to the department added notification
+    this._departmentService.departmentsChanged$
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(() => {
+      this.loadDepartments();  // Reload departments when a new one is added
+    });
   }
 
   /** Department change updates the roles array to the selected Department Roles  */
@@ -62,11 +81,10 @@ export class EmployeeCreateComponent implements OnInit{
     .subscribe({
       next: (data) => {
         this.roles = data;
-        this.dataFetched = true;
         this.isLoading = false;
       },
-      error: (err) => {
-        this.errorMessage = err.message;
+      error: (error) => {
+        console.log(error.message);
         this.isLoading = false;
       }
     });
@@ -83,13 +101,12 @@ export class EmployeeCreateComponent implements OnInit{
       // console.log('Form Submitted:', formValue);
       this._employeeService.addEmployee(this.employeeForm.value).subscribe({
         next: () => {
-          this.successMessage = 'Department added successfully!';
           this.isLoading = false;
           this.employeeForm.reset();
-          this._employeeService.notifyEmployeeAdded();
+          this._employeeService.notifyEmployeesChanged();
         },
         error: (error) => {
-          this.errorMessage = error.message;
+          console.log(error.message);
           this.isLoading = false;
         }
       });

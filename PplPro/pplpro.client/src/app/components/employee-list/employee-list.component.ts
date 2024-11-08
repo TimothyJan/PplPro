@@ -19,10 +19,7 @@ export class EmployeeListComponent implements OnInit {
   filteredRoles: Role[] = [];
 
   editModeEmployeeId: number | null = null;
-  dataFetched: boolean = false;
   isLoading: boolean = false;
-  successMessage: string | null = null;
-  errorMessage: string | null = null;
   private unsubscribe$ = new Subject<void>();
 
   originalRoleID: number | null = null;
@@ -38,12 +35,6 @@ export class EmployeeListComponent implements OnInit {
     this.loadEmployees();
     this.loadDepartments();
     this.loadRoles();
-
-    this._employeeService.employeeAdded$
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(() => {
-      this.loadEmployees();
-    })
   }
 
   /** Load all Employees */
@@ -54,17 +45,23 @@ export class EmployeeListComponent implements OnInit {
       .subscribe({
         next: (data) => {
           this.employees = data;
-          this.dataFetched = true;
           this.isLoading = false;
         },
-        error: (err) => {
-          this.errorMessage = err.message;
+        error: (error) => {
+          console.log(error.message);
           this.isLoading = false;
         }
       });
+
+    // Subscribe to the employee added notification
+    this._employeeService.employeesChanged$
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(() => {
+      this.loadEmployees(); // Reload employees when a new one is added
+    })
   }
 
-  /** Load all Departments */
+  /** Load Departments and subscribe to Departments  */
   loadDepartments(): void {
     this.isLoading = true;
     this._departmentService.getDepartments()
@@ -72,17 +69,23 @@ export class EmployeeListComponent implements OnInit {
       .subscribe({
         next: (data) => {
           this.departments = data;
-          this.dataFetched = true;
           this.isLoading = false;
         },
-        error: (err) => {
-          this.errorMessage = err.message;
+        error: (error) => {
+          console.log(error.message);
           this.isLoading = false;
         }
       });
+
+    // Subscribe to the department added notification
+    this._departmentService.departmentsChanged$
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(() => {
+      this.loadDepartments();  // Reload departments when a new one is added
+    });
   }
 
-  /** Load all Roles */
+  /** Load Roles and subscribe to Roles*/
   loadRoles(): void {
     this.isLoading = true;
     this._roleService.getRoles()
@@ -90,14 +93,20 @@ export class EmployeeListComponent implements OnInit {
       .subscribe({
         next: (data) => {
           this.roles = data;
-          this.dataFetched = true;
           this.isLoading = false;
         },
-        error: (err) => {
-          this.errorMessage = err.message;
+        error: (error) => {
+          console.log(error.message);
           this.isLoading = false;
         }
       });
+
+    // Subscribe to the role added notification
+    this._roleService.rolesChanged$
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(() => {
+      this.loadRoles(); // Reload roles when a new one is added
+    });
   }
 
   /** Get Department name from DepartmentID */
@@ -143,12 +152,13 @@ export class EmployeeListComponent implements OnInit {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: () => {
-          this.successMessage = 'Role updated successfully!';
           this.editModeEmployeeId = null;
           this.loadEmployees();
         },
-        error: (err) => this.errorMessage = err.message
-      });;
+        error: (error) => {
+          console.log(error.message);
+        }
+      });
     }
     this.editModeEmployeeId = null;
   }
@@ -161,11 +171,12 @@ export class EmployeeListComponent implements OnInit {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: () => {
-          this.successMessage = 'Role deleted successfully!';
           this.loadEmployees();
         },
-        error: (err) => this.errorMessage = err.message
-      });;
+        error: (error) => {
+          console.log(error.message);
+        }
+      });
     }
   }
 }

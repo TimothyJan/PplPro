@@ -1,6 +1,8 @@
 <div class="employee-container text-center">
   <h1 class="display-4 mb-4">Employee List</h1>
 
+  <div *ngIf="isLoading" class="text-center">Loading...</div>
+
   <div class="table-responsive">
     <table class="table table-hover table-striped">
       <thead>
@@ -14,7 +16,7 @@
           <th>Actions</th>
         </tr>
       </thead>
-      <tbody *ngIf="dataFetched; else loadingBlock">
+      <tbody>
         <tr *ngFor="let employee of employees">
           <td>{{ employee.employeeID }}</td>
 
@@ -93,7 +95,3 @@
     </table>
   </div>
 </div>
-
-<ng-template #loadingBlock>
-  <app-loading-spinner [isLoading]="!dataFetched"></app-loading-spinner>
-</ng-template>

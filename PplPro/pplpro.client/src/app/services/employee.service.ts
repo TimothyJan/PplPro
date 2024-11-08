@@ -7,8 +7,8 @@ import { Employee } from '../models/employee';
   providedIn: 'root'
 })
 export class EmployeeService {
-  private employeeAddedSource = new Subject<void>(); //Emit events when employee is added
-  employeeAdded$ = this.employeeAddedSource.asObservable();
+  private employeesChangedSource = new Subject<void>(); //Emit events when employee is added
+  employeesChanged$ = this.employeesChangedSource.asObservable();
 
   private apiUrl = 'https://localhost:7040/api/employee';
 
@@ -49,7 +49,7 @@ export class EmployeeService {
     return throwError(() => new Error(errorMessage));
   }
 
-  notifyEmployeeAdded(): void {
-    this.employeeAddedSource.next();
+  notifyEmployeesChanged(): void {
+    this.employeesChangedSource.next();
   }
 }

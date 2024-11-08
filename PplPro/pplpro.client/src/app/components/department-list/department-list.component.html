@@ -3,7 +3,7 @@
 
   <div *ngIf="isLoading" class="text-center">Loading...</div>
 
-  <div class="table-responsive" *ngIf="!isLoading">
+  <div class="table-responsive">
     <table class="table table-hover table-striped">
       <thead>
         <tr>
@@ -12,7 +12,7 @@
           <th>Actions</th>
         </tr>
       </thead>
-      <tbody *ngIf="dataFetched">
+      <tbody>
         <tr *ngFor="let department of departments">
           <td>{{ department.departmentID }}</td>
           <td *ngIf="editModeDepartmentId === department.departmentID">
@@ -32,7 +32,4 @@
       </tbody>
     </table>
   </div>
-
-  <div *ngIf="successMessage" class="text-success mt-3">{{ successMessage }}</div>
-  <div *ngIf="errorMessage" class="text-danger mt-3">{{ errorMessage }}</div>
 </div>

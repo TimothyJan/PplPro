@@ -1,23 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Department } from '../../models/department';
 import { DepartmentService } from '../../services/department.service';
 import { RoleService } from '../../services/role.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-role-create',
   templateUrl: './role-create.component.html',
   styleUrl: './role-create.component.css'
 })
-export class RoleCreateComponent implements OnInit{
+export class RoleCreateComponent implements OnInit, OnDestroy {
   roleForm: FormGroup = new FormGroup({
     roleName: new FormControl("", [Validators.required, Validators.minLength(2), Validators.maxLength(50)]),
     departmentID: new FormControl(null, Validators.required)
   });
   departments: Department[] = [];
   isLoading: boolean = false;
-  successMessage: string | null = null;
-  errorMessage: string | null = null;
+  private unsubscribe$ = new Subject<void>();
 
   constructor(
     private _roleService: RoleService,
@@ -25,13 +25,30 @@ export class RoleCreateComponent implements OnInit{
   ) {}
 
   ngOnInit(): void {
-    this.getDepartments();
+    this.loadDepartments();
   }
 
-  /** Get departments from Department Service */
-  getDepartments(): void {
-    this._departmentService.getDepartments().subscribe(data => {
-      this.departments = data;
+  /** Load Departments and subscribe to Departments */
+  loadDepartments(): void {
+    this.isLoading = true;
+    this._departmentService.getDepartments()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (data) => {
+          this.departments = data;
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.log(error.message);
+          this.isLoading = false;
+        }
+      });
+
+    // Subscribe to the department added notification
+    this._departmentService.departmentsChanged$
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(() => {
+      this.loadDepartments();  // Reload departments when a new one is added
     });
   }
 
@@ -45,17 +62,21 @@ export class RoleCreateComponent implements OnInit{
       // console.log('Form Submitted:', formValue);
       this._roleService.addRole(this.roleForm.value).subscribe({
         next: () => {
-          this.successMessage = 'Department added successfully!';
           this.isLoading = false;
           this.roleForm.reset();
-          this._roleService.notifyRoleAdded();
+          this._roleService.notifyRolesChanged();
         },
         error: (error) => {
-          this.errorMessage = error.message;
+          console.log(error.message);
           this.isLoading = false;
         }
       });
     }
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
 }
