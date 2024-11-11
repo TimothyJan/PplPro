@@ -61,5 +61,4 @@ export class RoleService {
   notifyRolesChanged(): void {
     this.rolesChangedSource.next();
   }
-
 }

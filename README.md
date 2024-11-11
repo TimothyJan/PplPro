@@ -1,5 +1,5 @@
 # PplPro
-Employee Management System with Angular (frontend), ASP.NET Core (backend), and SQL (database).
+Full-stack Employee Management System using ASP.NET Core, Angular, Bootstrap, and Azure SQL, implementing DTOs for data transfer, repository patterns for data access, and RESTful APIs for efficient employee, department, and role management, successfully deployed to Azure.
 
 Process:
 <ul>
