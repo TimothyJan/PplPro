@@ -1,6 +1,7 @@
 C:\Users\janti\OneDrive\Documents\GitHub\PplPro\PplPro\PplPro.Server\bin\Debug\net8.0\spa.proxy.json
 C:\Users\janti\OneDrive\Documents\GitHub\PplPro\PplPro\PplPro.Server\bin\Debug\net8.0\appsettings.Development.json
 C:\Users\janti\OneDrive\Documents\GitHub\PplPro\PplPro\PplPro.Server\bin\Debug\net8.0\appsettings.json
+C:\Users\janti\OneDrive\Documents\GitHub\PplPro\PplPro\PplPro.Server\bin\Debug\net8.0\PplPro.Server.staticwebassets.runtime.json
 C:\Users\janti\OneDrive\Documents\GitHub\PplPro\PplPro\PplPro.Server\bin\Debug\net8.0\PplPro.Server.exe
 C:\Users\janti\OneDrive\Documents\GitHub\PplPro\PplPro\PplPro.Server\bin\Debug\net8.0\PplPro.Server.deps.json
 C:\Users\janti\OneDrive\Documents\GitHub\PplPro\PplPro\PplPro.Server\bin\Debug\net8.0\PplPro.Server.runtimeconfig.json

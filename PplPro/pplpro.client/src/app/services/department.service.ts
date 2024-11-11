@@ -2,8 +2,12 @@ import { Injectable } from '@angular/core';
 import { Department } from '../models/department';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, Observable, Subject, throwError } from 'rxjs';
+import { environment } from '../../environments/environment.development';
 
-const apiUrl = 'https://localhost:7040/api/department';
+const apiUrl = `${environment.apiUrl}/department`;
+
+// const apiUrl = 'https://localhost:7040/api/department';
+// const apiUrl = './department';
 
 @Injectable({
   providedIn: 'root'

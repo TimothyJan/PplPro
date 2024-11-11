@@ -1,0 +1,45 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\janti\\OneDrive\\Documents\\GitHub\\PplPro\\PplPro\\PplPro.Server\\wwwroot\\browser\\favicon.ico",
+      "PackagePath": "staticwebassets\\browser\\favicon.ico"
+    },
+    {
+      "Id": "C:\\Users\\janti\\OneDrive\\Documents\\GitHub\\PplPro\\PplPro\\PplPro.Server\\wwwroot\\browser\\index.html",
+      "PackagePath": "staticwebassets\\browser\\index.html"
+    },
+    {
+      "Id": "C:\\Users\\janti\\OneDrive\\Documents\\GitHub\\PplPro\\PplPro\\PplPro.Server\\wwwroot\\browser\\main-AWJACYB2.js",
+      "PackagePath": "staticwebassets\\browser\\main-AWJACYB2.js"
+    },
+    {
+      "Id": "C:\\Users\\janti\\OneDrive\\Documents\\GitHub\\PplPro\\PplPro\\PplPro.Server\\wwwroot\\browser\\main-NT5UBYBY.js",
+      "PackagePath": "staticwebassets\\browser\\main-NT5UBYBY.js"
+    },
+    {
+      "Id": "C:\\Users\\janti\\OneDrive\\Documents\\GitHub\\PplPro\\PplPro\\PplPro.Server\\wwwroot\\browser\\polyfills-FFHMD2TL.js",
+      "PackagePath": "staticwebassets\\browser\\polyfills-FFHMD2TL.js"
+    },
+    {
+      "Id": "C:\\Users\\janti\\OneDrive\\Documents\\GitHub\\PplPro\\PplPro\\PplPro.Server\\wwwroot\\browser\\styles-DZ6UBGXD.css",
+      "PackagePath": "staticwebassets\\browser\\styles-DZ6UBGXD.css"
+    },
+    {
+      "Id": "obj\\Release\\net8.0\\staticwebassets\\msbuild.PplPro.Server.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Release\\net8.0\\staticwebassets\\msbuild.build.PplPro.Server.props",
+      "PackagePath": "build\\PplPro.Server.props"
+    },
+    {
+      "Id": "obj\\Release\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.PplPro.Server.props",
+      "PackagePath": "buildMultiTargeting\\PplPro.Server.props"
+    },
+    {
+      "Id": "obj\\Release\\net8.0\\staticwebassets\\msbuild.buildTransitive.PplPro.Server.props",
+      "PackagePath": "buildTransitive\\PplPro.Server.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

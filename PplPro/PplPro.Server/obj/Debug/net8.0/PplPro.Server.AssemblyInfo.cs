@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PplPro.Server")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c8386c2a306c728c3022e636fe00f04bcf93d32b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b7f1be2e5ff7014a10501064f5f5a20562060a9f")]
 [assembly: System.Reflection.AssemblyProductAttribute("PplPro.Server")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PplPro.Server")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

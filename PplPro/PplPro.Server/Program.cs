@@ -6,6 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Fetch connection string from environment variable or configuration
 var connectionString = Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTION")
                    ?? builder.Configuration.GetConnectionString("AzureSqlDb");
+//var connectionString = builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTION")
+//                    ?? throw new InvalidOperationException("Connection string 'AZURE_SQL_CONNECTION' not found.");
 
 // Register DbContext with retry policy for transient fault handling
 builder.Services.AddDbContext<EmployeeDbContext>(options =>
