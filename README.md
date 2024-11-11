@@ -16,7 +16,7 @@ Process:
       <li>Add Required NuGet Packages
         <ul>
           <li><code>Microsoft.EntityFrameworkCore</code></li>
-          <li><code>Microsoft.EntityFrameworkCore.SqlServer</code>></li>
+          <li><code>Microsoft.EntityFrameworkCore.SqlServer</code></li>
           <li><code>Microsoft.EntityFrameworkCore.Tools</code></li>
           <li><code>Swashbuckle.AspNetCore</code></li>
         </ul>
@@ -49,6 +49,7 @@ Process:
         </ul>
       </li>
       <li>Initialize the Database with Sample Data. Create a SeedData.cs.</li>
+      <li>Configure Program.cs to use SeedData.</li>
     </ul>
   </li>
   <li>Design frontend and set Up Angular Frontend to Communicate with the API.
@@ -59,16 +60,16 @@ Process:
         </ul>
       </li>
       <li>Create Models (Department, Role, Employee)</li>
-      <li>Generate components and services for Department, Role, Employee.</li>
+      <li>Generate components(Create and List) and services for Department, Role, Employee.</li>
       <li>Configure Angular Environment Variables for development and production using environment.</li>
       <li>Set up HTTP Interactions, connecting Angular to ASP.NET Core API.</li>
       <li>Enable CORS in ASP.NET Core.</li>
       <li>Build Angular for production
         <ul>
-          <li>~ng build --configuration production</li>
+          <li>~<code>ng build --configuration production</code></li>
         </ul>
       </li>
-      <li>Create <code>wwwroot</code> folder and add production browser files here (favicon.io, index.html, main, polyfills, and styles).</li>
+      <li>Create <code>wwwroot</code> folder and add teh created production browser files (favicon.io, index.html, main, polyfills, and styles) from the dist folder.</li>
       <li>Configure Program.cs to UseDefaultFiles and UseStaticFiles.</li>
     </ul>
   </li>
